@@ -58,28 +58,21 @@
                     autolock: false,
                     log: (message) => {
                         console.log("[JSDOS]", message);
-                        status.textContent = message;
                     }
                 });
                 
-                status.textContent = 'Loading game files...';
+                status.textContent = 'Mounting game files...';
                 
                 try {
-                    // List the current directory to help debug
-                    await ci.run('dir');
-                    
-                    // Mount the ZIP file - make sure HIKIKO.zip is in the same folder as this HTML
+                    // Mount the ZIP file
+                    status.textContent = 'Loading HIKIKO.zip...';
                     await ci.mount('HIKIKO.zip');
-                    status.textContent = 'Mounted game files...';
                     
-                    // List contents after mounting to verify
-                    await ci.run('dir');
-                    
-                    // Navigate to HIKIKO directory and start the game
-                    await ci.run([
-                        '-c', 'cd HIKIKO',
-                        '-c', 'dir',  // Show contents of HIKIKO directory
-                        '-c', 'START.BAT'
+                    status.textContent = 'Changing to game directory...';
+                    // Execute commands in sequence
+                    await ci.shell([
+                        'cd HIKIKO',
+                        'START.BAT'
                     ]);
                     
                     status.textContent = 'Game started!';
