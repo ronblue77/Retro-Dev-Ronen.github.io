@@ -20,8 +20,11 @@
         // Initialize the DOSBox instance with the canvas
         function startGame() {
             Dos(document.getElementById("jsdos")).ready((fs, main) => {
+                console.log("Starting game...");
+                
                 // Extract game files from the ZIP archive (adjust path as needed)
                 fs.extract("games/HIKIKO.zip").then(() => {
+                    console.log("Game files extracted.");
                     // Run the game by executing the batch file (START.BAT) inside the HIKIKO folder
                     main(["-c", "cd HIKIKO", "-c", "START.BAT"]);
                 }).catch((error) => {
