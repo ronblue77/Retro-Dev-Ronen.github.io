@@ -27,8 +27,12 @@
             var canvas = document.getElementById('dosbox');
             Dos(canvas, {
                 wdosboxUrl: "games/HIKIKO.ZIP", // Path to your DOS game ZIP file
-                commands: ["START.BAT"], // Batch file to run the game
-                autolock: true
+                autolock: true, // Enable autolocking of mouse
+                commands: [
+                    "mount c /", // Mount root as C: drive (change if necessary)
+                    "c:",         // Change to the C: drive (where the batch file is located)
+                    "START.BAT"   // Run the batch file to start the game
+                ]
             });
         }
     </script>
