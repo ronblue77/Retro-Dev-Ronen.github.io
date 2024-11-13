@@ -12,12 +12,17 @@
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             padding: 20px;
+            min-height: 100vh;
+            margin: 0;
         }
         #jsdos {
-            width: 640px;
-            height: 400px;
+            width: 800px; /* Increased from 640px */
+            height: 600px; /* Increased from 400px */
             border: 2px solid #333;
             margin: 20px 0;
+            image-rendering: pixelated; /* Better pixel scaling */
+            image-rendering: crisp-edges;
+            -webkit-image-rendering: pixelated;
         }
         button {
             padding: 10px 20px;
@@ -27,6 +32,7 @@
             color: white;
             border: none;
             border-radius: 4px;
+            margin: 10px;
         }
         button:hover {
             background-color: #45a049;
@@ -34,6 +40,28 @@
         #status {
             margin: 10px 0;
             font-style: italic;
+        }
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .fullscreen-button {
+            background-color: #2196F3;
+        }
+        .fullscreen-button:hover {
+            background-color: #1976D2;
+        }
+        /* Add some instructions */
+        .instructions {
+            margin: 20px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 800px;
         }
     </style>
     <!-- Load JS-DOS from CDN -->
@@ -44,21 +72,42 @@
     <h1>Play Hikikomori on DOS</h1>
     <div id="status">Ready to start...</div>
     <canvas id="jsdos"></canvas>
-    <button onclick="startGame()">Start Game</button>
+    <div class="controls">
+        <button onclick="startGame()">Start Game</button>
+        <button onclick="toggleFullscreen()" class="fullscreen-button">Toggle Fullscreen</button>
+        <button onclick="adjustSound(0.5)">50% Volume</button>
+        <button onclick="adjustSound(1)">100% Volume</button>
+    </div>
+    <div class="instructions">
+        <h3>Controls & Tips:</h3>
+        <ul>
+            <li>Press F4 to change CPU speed if game runs too fast/slow</li>
+            <li>Alt + Enter: Toggle fullscreen</li>
+            <li>Ctrl + F11/F12: Adjust CPU speed</li>
+            <li>Click inside the game window to capture mouse/keyboard</li>
+            <li>Press ESC to release mouse/keyboard capture</li>
+        </ul>
+    </div>
 
     <script>
+        let dosbox = null;
+
         async function startGame() {
             const status = document.getElementById('status');
             status.textContent = 'Initializing DOS...';
             
-            // The correct paths
             const zipPath = '/Retro-Dev-Ronen.github.io/games/HIKIKO.zip';
             
             try {
-                // Initialize DOS with explicit wasm URLs
-                const dosbox = Dos(document.getElementById('jsdos'), {
+                // Initialize DOS with better performance settings
+                dosbox = Dos(document.getElementById('jsdos'), {
                     wdosboxUrl: "https://js-dos.com/6.22/current/wdosbox.js",
                     wasmUrl: "https://js-dos.com/6.22/current/wdosbox.wasm.js",
+                    cycles: "max",               // Maximum CPU cycles
+                    autolock: true,              // Auto lock mouse
+                    soundVolume: 1,              // Full volume
+                    scaleFactor: 2,              // Better scaling
+                    renderingMode: "webgl",      // Use WebGL for better performance
                 });
 
                 dosbox.ready((fs, main) => {
@@ -66,18 +115,22 @@
                     
                     fs.extract(zipPath).then(() => {
                         status.textContent = 'Game files extracted, starting...';
-                        main(["-c", "cd HIKIKO", "-c", "START.BAT"])
-                            .then(() => {
-                                status.textContent = 'Game started!';
-                            })
-                            .catch((error) => {
-                                status.textContent = 'Error starting game: ' + error;
-                                console.error('Game start error:', error);
-                            });
+                        main([
+                            "-c", "mount c .",
+                            "-c", "c:",
+                            "-c", "cd HIKIKO",
+                            "-c", "START.BAT"
+                        ])
+                        .then(() => {
+                            status.textContent = 'Game running! Click inside to capture mouse/keyboard.';
+                        })
+                        .catch((error) => {
+                            status.textContent = 'Error starting game: ' + error;
+                            console.error('Game start error:', error);
+                        });
                     }).catch((error) => {
                         status.textContent = 'Error extracting files: ' + error;
                         console.error('Extraction error:', error);
-                        console.log('Attempted ZIP path:', zipPath);
                     });
                 }).catch((error) => {
                     status.textContent = 'Error initializing DOS: ' + error;
@@ -88,6 +141,31 @@
                 console.error('Initialization error:', error);
             }
         }
+
+        function toggleFullscreen() {
+            const canvas = document.getElementById('jsdos');
+            if (!document.fullscreenElement) {
+                canvas.requestFullscreen().catch(err => {
+                    console.error('Error attempting to enable fullscreen:', err);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        function adjustSound(volume) {
+            if (dosbox && dosbox.shellInputQueue) {
+                dosbox.shellInputQueue([`mixer master ${Math.floor(volume * 100)}`]);
+            }
+        }
+
+        // Handle keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Alt + Enter for fullscreen
+            if (e.key === 'Enter' && e.altKey) {
+                toggleFullscreen();
+            }
+        });
     </script>
 </body>
 </html>
