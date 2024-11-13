@@ -51,26 +51,44 @@
             status.textContent = 'Initializing DOS...';
             
             try {
-                // Initialize DOS
+                // Initialize DOS with logging enabled
                 const ci = await Dos(document.getElementById('jsdos'), {
                     wdosboxUrl: "https://cdn.jsdelivr.net/npm/js-dos@7.5.0/dist/wdosbox.js",
                     cycles: "auto",
-                    autolock: false
+                    autolock: false,
+                    log: (message) => {
+                        console.log("[JSDOS]", message);
+                        status.textContent = message;
+                    }
                 });
                 
                 status.textContent = 'Loading game files...';
                 
                 try {
-                    // Replace 'games/HIKIKO.zip' with the actual path to your game ZIP file
-                    await ci.mount('games/HIKIKO.zip');
-                    status.textContent = 'Starting game...';
-                    await ci.run('HIKIKO/START.BAT');
+                    // List the current directory to help debug
+                    await ci.run('dir');
+                    
+                    // Mount the ZIP file - make sure HIKIKO.zip is in the same folder as this HTML
+                    await ci.mount('HIKIKO.zip');
+                    status.textContent = 'Mounted game files...';
+                    
+                    // List contents after mounting to verify
+                    await ci.run('dir');
+                    
+                    // Navigate to HIKIKO directory and start the game
+                    await ci.run([
+                        '-c', 'cd HIKIKO',
+                        '-c', 'dir',  // Show contents of HIKIKO directory
+                        '-c', 'START.BAT'
+                    ]);
+                    
+                    status.textContent = 'Game started!';
                 } catch (mountError) {
-                    status.textContent = 'Error loading game files. Please check file path.';
-                    console.error('Mount error:', mountError);
+                    status.textContent = 'Error with game files: ' + mountError.message;
+                    console.error('Mount/Run error:', mountError);
                 }
             } catch (error) {
-                status.textContent = 'Error initializing DOS emulator.';
+                status.textContent = 'Error initializing DOS emulator: ' + error.message;
                 console.error('Initialization error:', error);
             }
         }
