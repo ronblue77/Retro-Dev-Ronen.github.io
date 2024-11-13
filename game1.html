@@ -2,38 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Play DOS Game - Retro Dev Ronen</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
-    <script src="https://cdn.jsdelivr.net/npm/js-dos@7/dist/js-dos.min.js"></script> <!-- JD-DOS emulator -->
+    <title>Play Hikikomori - DOS Game</title>
+    <script src="https://js-dos.com/6.22/current/js-dos.js"></script> <!-- Correct JS-DOS 6.22 version -->
+    <style>
+        canvas {
+            width: 640px;
+            height: 400px;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Play DOS Game on Retro Dev Ronen</h1>
-    </header>
-    <main>
-        <section>
-            <h2>Hikikomori</h2>
-            <div id="dosbox"></div> <!-- Container for JD-DOS -->
-            <button onclick="loadGame()">Start Game</button>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2024 Retro Dev Ronen</p>
-    </footer>
+    <h1>Play Hikikomori on DOS</h1>
+    <canvas id="jsdos"></canvas> <!-- Canvas element for the DOSBox emulator -->
+    <button onclick="startGame()">Start Game</button>
 
     <script>
-        function loadGame() {
-            var canvas = document.getElementById('dosbox');
-            Dos(canvas, {
-                wdosboxUrl: "games/HIKIKO.ZIP", // Path to your DOS game ZIP file
-                autolock: true, // Enable autolocking of mouse
-                commands: [
-                    "mount c /",            // Mount the root as C: drive
-                    "c:",                   // Switch to the C: drive
-                    "cd HIKIKO",            // Navigate to the HIKIKO folder inside the ZIP
-                    "START.BAT"             // Run the batch file inside the HIKIKO folder
-                ]
+        // Initialize the DOSBox instance with the canvas
+        function startGame() {
+            Dos(document.getElementById("jsdos")).ready((fs, main) => {
+                // Extract game files from the ZIP archive (adjust path as needed)
+                fs.extract("games/HIKIKO.zip").then(() => {
+                    // Run the game by executing the batch file (START.BAT) inside the HIKIKO folder
+                    main(["-c", "cd HIKIKO", "-c", "START.BAT"]);
+                }).catch((error) => {
+                    console.error("Error extracting files:", error);
+                });
             });
         }
     </script>
