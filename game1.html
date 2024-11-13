@@ -51,12 +51,8 @@
             const status = document.getElementById('status');
             status.textContent = 'Initializing DOS...';
             
-            // Get the repository name from the current URL
-            const pathSegments = window.location.pathname.split('/');
-            const repoName = pathSegments[1]; // This will get your repository name
-            
-            // Construct the full path to the ZIP file
-            const zipPath = `https://ronblue77.github.io/Retro-Dev-Ronen.github.io/HIKIKO.zip`;
+            // The correct path to your ZIP file
+            const zipPath = '/Retro-Dev-Ronen.github.io/games/HIKIKO.zip';
             
             status.textContent = `Loading game from: ${zipPath}`;
             
@@ -78,7 +74,6 @@
                     }).catch((error) => {
                         status.textContent = 'Error extracting files: ' + error;
                         console.error('Extraction error:', error);
-                        // Log the attempted path for debugging
                         console.log('Attempted ZIP path:', zipPath);
                     });
                 });
