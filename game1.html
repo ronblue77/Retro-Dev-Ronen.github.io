@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play DOS Game - Retro Dev Ronen</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+    <script src="https://cdn.jsdelivr.net/npm/js-dos@7/dist/js-dos.min.js"></script> <!-- JD-DOS emulator -->
+</head>
+<body>
+    <header>
+        <h1>Play DOS Game on Retro Dev Ronen</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Hikikomori</h2>
+            <div id="dosbox"></div> <!-- Container for JD-DOS -->
+            <button onclick="loadGame()">Start Game</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Retro Dev Ronen</p>
+    </footer>
+
+    <script>
+        function loadGame() {
+            var canvas = document.getElementById('dosbox');
+            Dos(canvas, {
+                wdosboxUrl: "games/HIKIKO.ZIP", // Path to your DOS game ZIP file
+                commands: ["START.BAT"], // Batch file to run the game
+                autolock: true
+            });
+        }
+    </script>
+</body>
+</html>
