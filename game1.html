@@ -29,9 +29,10 @@
                 wdosboxUrl: "games/HIKIKO.ZIP", // Path to your DOS game ZIP file
                 autolock: true, // Enable autolocking of mouse
                 commands: [
-                    "mount c /", // Mount root as C: drive (change if necessary)
-                    "c:",         // Change to the C: drive (where the batch file is located)
-                    "START.BAT"   // Run the batch file to start the game
+                    "mount c /",            // Mount the root as C: drive
+                    "c:",                   // Switch to the C: drive
+                    "cd HIKIKO",            // Navigate to the HIKIKO folder inside the ZIP
+                    "START.BAT"             // Run the batch file inside the HIKIKO folder
                 ]
             });
         }
