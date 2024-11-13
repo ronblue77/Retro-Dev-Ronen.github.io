@@ -51,14 +51,17 @@
             const status = document.getElementById('status');
             status.textContent = 'Initializing DOS...';
             
-            // The correct path to your ZIP file
+            // The correct paths
             const zipPath = '/Retro-Dev-Ronen.github.io/games/HIKIKO.zip';
             
-            status.textContent = `Loading game from: ${zipPath}`;
-            
             try {
-                // Initialize DOS
-                Dos(document.getElementById('jsdos')).ready((fs, main) => {
+                // Initialize DOS with explicit wasm URLs
+                const dosbox = Dos(document.getElementById('jsdos'), {
+                    wdosboxUrl: "https://js-dos.com/6.22/current/wdosbox.js",
+                    wasmUrl: "https://js-dos.com/6.22/current/wdosbox.wasm.js",
+                });
+
+                dosbox.ready((fs, main) => {
                     status.textContent = 'DOS initialized, loading game...';
                     
                     fs.extract(zipPath).then(() => {
@@ -76,6 +79,9 @@
                         console.error('Extraction error:', error);
                         console.log('Attempted ZIP path:', zipPath);
                     });
+                }).catch((error) => {
+                    status.textContent = 'Error initializing DOS: ' + error;
+                    console.error('DOS initialization error:', error);
                 });
             } catch (error) {
                 status.textContent = 'Error initializing DOS emulator: ' + error.message;
