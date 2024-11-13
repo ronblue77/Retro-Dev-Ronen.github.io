@@ -2,35 +2,77 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Play Hikikomori - DOS Game</title>
-    <script src="https://js-dos.com/6.22/current/js-dos.js"></script> <!-- Correct JS-DOS 6.22 version -->
     <style>
-        canvas {
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        #jsdos {
             width: 640px;
             height: 400px;
+            border: 2px solid #333;
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #status {
+            margin: 10px 0;
+            font-style: italic;
         }
     </style>
+    <!-- Load JS-DOS from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/js-dos@7.5.0/dist/js-dos.js"></script>
 </head>
 <body>
     <h1>Play Hikikomori on DOS</h1>
-    <canvas id="jsdos"></canvas> <!-- Canvas element for the DOSBox emulator -->
+    <div id="status">Ready to start...</div>
+    <canvas id="jsdos"></canvas>
     <button onclick="startGame()">Start Game</button>
 
     <script>
-        // Initialize the DOSBox instance with the canvas
-        function startGame() {
-            Dos(document.getElementById("jsdos")).ready((fs, main) => {
-                console.log("Starting game...");
-                
-                // Extract game files from the ZIP archive (adjust path as needed)
-                fs.extract("games/HIKIKO.zip").then(() => {
-                    console.log("Game files extracted.");
-                    // Run the game by executing the batch file (START.BAT) inside the HIKIKO folder
-                    main(["-c", "cd HIKIKO", "-c", "START.BAT"]);
-                }).catch((error) => {
-                    console.error("Error extracting files:", error);
+        async function startGame() {
+            const status = document.getElementById('status');
+            status.textContent = 'Initializing DOS...';
+            
+            try {
+                // Initialize DOS
+                const ci = await Dos(document.getElementById('jsdos'), {
+                    wdosboxUrl: "https://cdn.jsdelivr.net/npm/js-dos@7.5.0/dist/wdosbox.js",
+                    cycles: "auto",
+                    autolock: false
                 });
-            });
+                
+                status.textContent = 'Loading game files...';
+                
+                try {
+                    // Replace 'games/HIKIKO.zip' with the actual path to your game ZIP file
+                    await ci.mount('games/HIKIKO.zip');
+                    status.textContent = 'Starting game...';
+                    await ci.run('HIKIKO/START.BAT');
+                } catch (mountError) {
+                    status.textContent = 'Error loading game files. Please check file path.';
+                    console.error('Mount error:', mountError);
+                }
+            } catch (error) {
+                status.textContent = 'Error initializing DOS emulator.';
+                console.error('Initialization error:', error);
+            }
         }
     </script>
 </body>
