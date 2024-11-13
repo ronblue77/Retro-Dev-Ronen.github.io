@@ -37,7 +37,8 @@
         }
     </style>
     <!-- Load JS-DOS from CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/js-dos@7.5.0/dist/js-dos.js"></script>
+    <script src="https://js-dos.com/6.22/current/js-dos.js"></script>
+    <link href="https://js-dos.com/6.22/current/js-dos.css" rel="stylesheet">
 </head>
 <body>
     <h1>Play Hikikomori on DOS</h1>
@@ -50,36 +51,37 @@
             const status = document.getElementById('status');
             status.textContent = 'Initializing DOS...';
             
+            // Get the repository name from the current URL
+            const pathSegments = window.location.pathname.split('/');
+            const repoName = pathSegments[1]; // This will get your repository name
+            
+            // Construct the full path to the ZIP file
+            const zipPath = `https://ronblue77.github.io/Retro-Dev-Ronen.github.io/HIKIKO.zip`;
+            
+            status.textContent = `Loading game from: ${zipPath}`;
+            
             try {
-                // Initialize DOS with logging enabled
-                const ci = await Dos(document.getElementById('jsdos'), {
-                    wdosboxUrl: "https://cdn.jsdelivr.net/npm/js-dos@7.5.0/dist/wdosbox.js",
-                    cycles: "auto",
-                    autolock: false,
-                    log: (message) => {
-                        console.log("[JSDOS]", message);
-                    }
+                // Initialize DOS
+                Dos(document.getElementById('jsdos')).ready((fs, main) => {
+                    status.textContent = 'DOS initialized, loading game...';
+                    
+                    fs.extract(zipPath).then(() => {
+                        status.textContent = 'Game files extracted, starting...';
+                        main(["-c", "cd HIKIKO", "-c", "START.BAT"])
+                            .then(() => {
+                                status.textContent = 'Game started!';
+                            })
+                            .catch((error) => {
+                                status.textContent = 'Error starting game: ' + error;
+                                console.error('Game start error:', error);
+                            });
+                    }).catch((error) => {
+                        status.textContent = 'Error extracting files: ' + error;
+                        console.error('Extraction error:', error);
+                        // Log the attempted path for debugging
+                        console.log('Attempted ZIP path:', zipPath);
+                    });
                 });
-                
-                status.textContent = 'Mounting game files...';
-                
-                try {
-                    // Mount the ZIP file
-                    status.textContent = 'Loading HIKIKO.zip...';
-                    await ci.mount('HIKIKO.zip');
-                    
-                    status.textContent = 'Changing to game directory...';
-                    // Execute commands in sequence
-                    await ci.shell([
-                        'cd HIKIKO',
-                        'START.BAT'
-                    ]);
-                    
-                    status.textContent = 'Game started!';
-                } catch (mountError) {
-                    status.textContent = 'Error with game files: ' + mountError.message;
-                    console.error('Mount/Run error:', mountError);
-                }
             } catch (error) {
                 status.textContent = 'Error initializing DOS emulator: ' + error.message;
                 console.error('Initialization error:', error);
