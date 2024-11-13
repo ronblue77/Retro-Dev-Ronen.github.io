@@ -225,6 +225,28 @@
             gap: 1rem;
             margin-top: 1rem;
         }
+        .flag-counter {
+            text-align: center;
+            margin: 2rem 0;
+            padding: 1rem;
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid #ffffff;
+            position: relative;
+        }
+
+        .flag-counter::before {
+            content: "VISITORS:\\>";
+            position: absolute;
+            top: -1.5rem;
+            left: 1rem;
+            background-color: #000084;
+            padding: 0 0.5rem;
+        }
+
+        .flag-counter img {
+            border: 2px solid #00aa00;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
     </style>
 </head>
 <body>
@@ -272,8 +294,12 @@
             </div>
         </section>
     </main>
-    <footer>
-        <p>© 2024 Retro Dev Ronen | <a href="about-me.html" style="color: #ffffff; text-decoration: none;">ABOUT.ME</a> | MEMORY: 640K OK | DOS Version 2024</p>
-    </footer>
+</main>
+<div class="flag-counter">
+    <a href="https://info.flagcounter.com/TETu"><img src="https://s01.flagcounter.com/count2/TETu/bg_FFFFFF/txt_000000/border_CCCCCC/columns_5/maxflags_50/viewers_0/labels_0/pageviews_0/flags_0/percent_0/" alt="Flag Counter" border="0"></a>
+</div>
+<footer>
+    <p>© 2024 Retro Dev Ronen | <a href="about-me.html" style="color: #ffffff; text-decoration: none;">ABOUT.ME</a> | MEMORY: 640K OK | DOS Version 2024</p>
+</footer>
 </body>
 </html>
