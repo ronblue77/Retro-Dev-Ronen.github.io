@@ -61,12 +61,10 @@
             box-sizing: border-box;
         }
 
-        header .btn {
-            font-size: 1rem;
-            padding: 0.5rem 1rem;
-            margin-top: 1rem;
+        /* Apply retro effects only to specific elements using a class */
+        .retro-text {
+            animation: textShadow 1.6s infinite;
         }
-        
 
         body {
             font-family: 'Courier New', Courier, monospace;
@@ -75,13 +73,13 @@
             line-height: 1.6;
             overflow-x: hidden;
             overflow-y: auto;
-            animation: textShadow 1.6s infinite;
             position: relative;
             min-height: 100vh;
             padding-bottom: 60px;
         }
 
-        body::before {
+        /* Move the flickering overlay effect to a pseudo-element on the main content */
+        .retro-content::before {
             content: "";
             position: fixed;
             top: 0;
@@ -107,6 +105,12 @@
             background-color: #000084;
             position: relative;
             z-index: 1;
+        }
+
+        header .btn {
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            margin-top: 1rem;
         }
 
         h1 {
@@ -135,6 +139,27 @@
 
         section::before {
             content: "C:\\>";
+            position: absolute;
+            top: -1.5rem;
+            left: 1rem;
+            background-color: #000084;
+            padding: 0 0.5rem;
+        }
+
+        /* Guestbook section specific styles */
+        .guestbook-section {
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            border: 1px solid #ffffff;
+            margin: 2rem 0;
+            position: relative;
+            /* Remove any animation effects */
+            animation: none;
+            text-shadow: none;
+        }
+
+        .guestbook-section::before {
+            content: "GUESTBOOK:\\>";
             position: absolute;
             top: -1.5rem;
             left: 1rem;
@@ -225,6 +250,7 @@
             gap: 1rem;
             margin-top: 1rem;
         }
+
         .flag-counter {
             text-align: center;
             margin: 2rem 0;
@@ -250,77 +276,83 @@
     </style>
 </head>
 <body>
-    <header>
-        <h1 class="typing">Retro Dev Ronen</h1>
-        <a href="about-me.html" class="btn">ABOUT.ME</a>
-    </header>
-    <main>
-        <section>
-            <h2>C:\>EXPLORE_DOS_GAMES.EXE</h2>
-            <p>Welcome to the DOS Gaming Archive...<span class="cursor"></span></p>
-            <p>Loading classic gaming experience...</p>
-            <p>System Status: READY</p>
-            <p>Insert command to begin gaming session:</p>
-            <div class="button-container">
-                <a href="game1-desc.html" class="btn">RUN HIKIKOMORI.EXE</a>
-                <a href="lost-art-game-desc.html" class="btn">RUN LOST_ART.EXE</a>
-                <a href="gaza-game-desc.html" class="btn">RUN GAZA.EXE</a>
-                <a href="mental-game-desc.html" class="btn">RUN MENTAL.EXE</a>
-                <a href="hostel-game-desc.html" class="btn">RUN HOSTEL.EXE</a>
-                <a href="avivbot-game-desc.html" class="btn">RUN AVIVBOT.EXE</a>
-                <a href="loserville-game-desc.html" class="btn">RUN LOSERVILLE.EXE</a>
-                <a href="titanic-game-desc" class="btn">RUN TITANIC.EXE</a>
-                <a href="peacemaker-game-desc.html" class="btn">RUN PEACEMAKER.EXE</a>
-            </div>
-        </section>
-        <section>
-            <h2>C:\>EXPLORE_DOS_DEMOS.EXE</h2>
-            <p>Welcome to the DOS Demos Archive...<span class="cursor"></span></p>
-            <p>Loading demo experiences...</p>
-            <p>System Status: READY</p>
-            <p>Insert command to begin demo session:</p>
-            <div class="button-container">
-                <a href="matrix-demo-desc.html" class="btn">RUN MATRIX.EXE</a>
-            </div>
-        </section>
-        <section>
-            <h2>C:\>EXPLORE_VIDEO_ARCHIVE.EXE</h2>
-            <p>Welcome to the Video Archive...<span class="cursor"></span></p>
-            <p>Loading video content...</p>
-            <p>System Status: READY</p>
-            <p>Insert command to begin video session:</p>
-            <div class="button-container">
-                <a href="odysee-videos.html" class="btn">RUN VIDEOS.EXE</a>
-            </div>
-        </section>
-        <section>
-            <h2>C:\>EXPLORE_WEB_GAMES.EXE</h2>
-            <p>Welcome to the Web Gaming Archive...<span class="cursor"></span></p>
-            <p>Loading modern web games...</p>
-            <p>System Status: READY</p>
-            <p>Insert command to begin gaming session:</p>
-            <div class="button-container">
-                <a href="webgames/shooter-game/game.html" class="btn">RUN SPACE_SHOOTER.EXE</a>
-                <a href="homeless-game-desc.html" class="btn">RUN HOMELESS.EXE</a>
-                <a href="webgames/mandelbrot/mandelbrot.html" class="btn">RUN MANDEBROT_DEMO.EXE</a>
-                <a href="webgames/night-story/game.html" class="btn">RUN NIGHT_STORY.EXE</a>
-            </div>
-        </section>
-        <!-- Bravenet Embedded Service Code -->
-        <script src="https://apps.bravenet.com/go.js?service=guestbook;id=1;usernum=3592203115" type="text/javascript" charset="utf-8"></script>
-        
-        <!-- Other sections -->
-        <section class="flag-counter">
-            <a href="https://info.flagcounter.com/TETu">
-                <img src="https://s01.flagcounter.com/count2/TETu/bg_FFFFFF/txt_000000/border_CCCCCC/columns_5/maxflags_50/viewers_0/labels_0/pageviews_0/flags_0/percent_0/" 
-                        alt="Flag Counter" 
-                        style="border: 0;">
-            </a>
-        </section>
-    </main>
-</main>
-<footer>
-    <p>© 2024 Retro Dev Ronen | <a href="about-me.html" style="color: #ffffff; text-decoration: none;">ABOUT.ME</a> | MEMORY: 640K OK | DOS Version 2024</p>
-</footer>
+    <div class="retro-content">
+        <header class="retro-text">
+            <h1 class="typing">Retro Dev Ronen</h1>
+            <a href="about-me.html" class="btn">ABOUT.ME</a>
+        </header>
+        <main>
+            <section class="retro-text">
+                <h2>C:\>EXPLORE_DOS_GAMES.EXE</h2>
+                <p>Welcome to the DOS Gaming Archive...<span class="cursor"></span></p>
+                <p>Loading classic gaming experience...</p>
+                <p>System Status: READY</p>
+                <p>Insert command to begin gaming session:</p>
+                <div class="button-container">
+                    <a href="game1-desc.html" class="btn">RUN HIKIKOMORI.EXE</a>
+                    <a href="lost-art-game-desc.html" class="btn">RUN LOST_ART.EXE</a>
+                    <a href="gaza-game-desc.html" class="btn">RUN GAZA.EXE</a>
+                    <a href="mental-game-desc.html" class="btn">RUN MENTAL.EXE</a>
+                    <a href="hostel-game-desc.html" class="btn">RUN HOSTEL.EXE</a>
+                    <a href="avivbot-game-desc.html" class="btn">RUN AVIVBOT.EXE</a>
+                    <a href="loserville-game-desc.html" class="btn">RUN LOSERVILLE.EXE</a>
+                    <a href="titanic-game-desc" class="btn">RUN TITANIC.EXE</a>
+                    <a href="peacemaker-game-desc.html" class="btn">RUN PEACEMAKER.EXE</a>
+                </div>
+            </section>
+            <section class="retro-text">
+                <h2>C:\>EXPLORE_DOS_DEMOS.EXE</h2>
+                <p>Welcome to the DOS Demos Archive...<span class="cursor"></span></p>
+                <p>Loading demo experiences...</p>
+                <p>System Status: READY</p>
+                <p>Insert command to begin demo session:</p>
+                <div class="button-container">
+                    <a href="matrix-demo-desc.html" class="btn">RUN MATRIX.EXE</a>
+                </div>
+            </section>
+            <section class="retro-text">
+                <h2>C:\>EXPLORE_VIDEO_ARCHIVE.EXE</h2>
+                <p>Welcome to the Video Archive...<span class="cursor"></span></p>
+                <p>Loading video content...</p>
+                <p>System Status: READY</p>
+                <p>Insert command to begin video session:</p>
+                <div class="button-container">
+                    <a href="odysee-videos.html" class="btn">RUN VIDEOS.EXE</a>
+                </div>
+            </section>
+            <section class="retro-text">
+                <h2>C:\>EXPLORE_WEB_GAMES.EXE</h2>
+                <p>Welcome to the Web Gaming Archive...<span class="cursor"></span></p>
+                <p>Loading modern web games...</p>
+                <p>System Status: READY</p>
+                <p>Insert command to begin gaming session:</p>
+                <div class="button-container">
+                    <a href="webgames/shooter-game/game.html" class="btn">RUN SPACE_SHOOTER.EXE</a>
+                    <a href="homeless-game-desc.html" class="btn">RUN HOMELESS.EXE</a>
+                    <a href="webgames/mandelbrot/mandelbrot.html" class="btn">RUN MANDEBROT_DEMO.EXE</a>
+                    <a href="webgames/night-story/game.html" class="btn">RUN NIGHT_STORY.EXE</a>
+                </div>
+            </section>
+
+            <!-- Guestbook section without retro effects -->
+            <section class="guestbook-section">
+                <h2>C:\>GUESTBOOK.EXE</h2>
+                <!-- Bravenet Embedded Service Code -->
+                <script src="https://apps.bravenet.com/go.js?service=guestbook;id=1;usernum=3592203115" type="text/javascript" charset="utf-8"></script>
+            </section>
+
+            <!-- Flag counter section -->
+            <section class="flag-counter retro-text">
+                <a href="https://info.flagcounter.com/TETu">
+                    <img src="https://s01.flagcounter.com/count2/TETu/bg_FFFFFF/txt_000000/border_CCCCCC/columns_5/maxflags_50/viewers_0/labels_0/pageviews_0/flags_0/percent_0/" 
+                         alt="Flag Counter" 
+                         style="border: 0;">
+                </a>
+            </section>
+        </main>
+        <footer class="retro-text">
+            <p>© 2024 Retro Dev Ronen | <a href="about-me.html" style="color: #ffffff; text-decoration: none;">ABOUT.ME</a> | MEMORY: 640K OK | DOS Version 2024</p>
+        </footer>
+    </div>
 </body>
 </html>
