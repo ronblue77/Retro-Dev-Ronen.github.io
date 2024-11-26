@@ -1,8 +1,8 @@
---- 
+---
 
 layout: post
 
-title: "my first blog post here at retro dev ronen"
+title: "My First Blog Post"
 
 date: 2024-11-26
 
