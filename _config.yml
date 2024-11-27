@@ -1,3 +1,5 @@
 title: Retro Dev Ronen
 baseurl: "/Retro-Dev-Ronen.github.io"
 url: "https://ronblue77.github.io"
+paginate: 10  # Number of posts per page
+paginate_path: "/blog/page:num/"
