@@ -1,5 +1,4 @@
 ---
-
 layout: post
 
 title: "My First Blog Post"
@@ -7,8 +6,6 @@ title: "My First Blog Post"
 date: 2024-11-26
 
 ---
-
-
 
 hi hello everyone i'm Ronen known as ron77 or Retro Dev Ronen and this is my first attempt at making my own blog section at my new site
 
