@@ -1,5 +1,8 @@
+plugins:
+  - jekyll-paginate
+
 title: Retro Dev Ronen
 baseurl: "/Retro-Dev-Ronen.github.io"
 url: "https://ronblue77.github.io"
-paginate: 10  # Number of posts per page
+paginate: 10
 paginate_path: "/blog/page:num/"

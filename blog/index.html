@@ -12,7 +12,7 @@ title: Dev Blog
         </article>
         {% endfor %}
         
-        <!-- Pagination links -->
+        {% if paginator.total_pages > 1 %}
         <div class="pagination">
             {% if paginator.previous_page %}
             <a href="{{ site.baseurl }}{{ paginator.previous_page_path }}" class="btn">PREV_PAGE.EXE</a>
@@ -22,5 +22,6 @@ title: Dev Blog
             <a href="{{ site.baseurl }}{{ paginator.next_page_path }}" class="btn">NEXT_PAGE.EXE</a>
             {% endif %}
         </div>
+        {% endif %}
     </div>
 </section>
