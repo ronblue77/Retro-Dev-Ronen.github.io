@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Site Assistant</title>
+    <style>
+        body {
+            background: #000084;
+            color: #33ff33;
+            font-family: 'Courier New', monospace;
+        }
+        .chat-container {
+            width: 800px;
+            height: 600px;
+            border: 2px solid #33ff33;
+            margin: 40px auto;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 15px rgba(51, 255, 51, 0.2);
+            background: #000;
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .message {
+            margin: 10px;
+            padding: 15px;
+            border-radius: 0;
+            max-width: 70%;
+            font-size: 16px;
+            border: 1px solid #33ff33;
+        }
+        .bot {
+            background: #001100;
+            align-self: flex-start;
+        }
+        .user {
+            background: #002200;
+            align-self: flex-end;
+        }
+        .chat-input {
+            display: flex;
+            padding: 20px;
+            background: #000;
+            border-top: 1px solid #33ff33;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 12px;
+            margin-right: 10px;
+            background: #000;
+            border: 1px solid #33ff33;
+            color: #33ff33;
+            font-family: 'Courier New', monospace;
+        }
+        .chat-input button {
+            padding: 12px 25px;
+            background: #001100;
+            color: #33ff33;
+            border: 1px solid #33ff33;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+        }
+        .chat-input button:hover {
+            background: #002200;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot">C:\>ASSISTANT.EXE loaded! Type HELP for available commands.</div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="Enter command...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const responses = {
+            // Help and navigation
+            "help": "Available sections:\n- DOS_GAMES (classic games)\n- WEB_GAMES (browser games)\n- DEMOS (demos)\n- VIDEOS (video content)\n- BLOG (articles)\n- CHAT (live chat)\n- FORUM (discussions)\nType 'info [section]' for details.",
+            "about": "Hi! I'm ron77, born 1977 in Israel. I'm a self-taught programmer since 2016, mainly using FreeBASIC. I create DOS-style games and love retro computing. Check ABOUT.ME for my full story!",
+            
+            // DOS Games
+            "dos games": "Current DOS games collection:\n- HIKIKOMORI\n- LOST_ART\n- GAZA\n- MENTAL\n- HOSTEL\n- AVIVBOT\n- LOSERVILLE\n- TITANIC\n- PEACEMAKER\n- PROTECTED_HOUSING\nType 'info [game]' for details.",
+            "web games": "Browser-based games:\n- SPACE_SHOOTER\n- HOMELESS\n- MANDELBROT_DEMO\n- NIGHT_STORY\nAll playable directly in your browser!",
+            
+            // Specific game info
+            "hikikomori": "Text-based game exploring themes of social isolation and mental health.",
+            "lost art": "a Futuristic Dark Dystopian Game where you try to Learn Programming to Save the World.",
+            "gaza": "Narrative-driven game exploring conflict and survival.",
+            "mental": "Psychological exploration game dealing with mental health themes.",
+            "space shooter": "Web-based retro-style space shooting game using Emscripten.",
+            
+            // Site sections
+            "demos": "Technical demos section featuring MATRIX.EXE - a visual demonstration.",
+            "blog": "although it's suppose to be a Dev Blog it's actually a Personal Blog of mine regarding my life and experience and my opinions and my struggles.",
+            "chat": "Real-time chat room for discussing retro gaming and programming.",
+            "forum": "Discussion forum for the retro dev community.",
+            "videos": "Video content available through Odysee platform.",
+            
+            // Programming
+            "programming": "I primarily use FreeBASIC, but also work with:\n- QB64\n- JavaScript\n- Python\n- C/C++\nMany games are compiled to web using Emscripten.",
+            
+            // Default response
+            "default": "Command not recognized. Type HELP for available commands. For specific game info, type 'info [game_name]'."
+        };
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const message = input.value.trim().toLowerCase();
+            
+            if (message === '') return;
+
+            addMessage(input.value, 'user');
+            input.value = '';
+
+            setTimeout(() => {
+                let response = responses.default;
+                
+                for (let key in responses) {
+                    if (message.includes(key)) {
+                        response = responses[key];
+                        break;
+                    }
+                }
+                
+                addMessage(response, 'bot');
+            }, 500);
+        }
+
+        function addMessage(text, sender) {
+            const messages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.textContent = text;
+            messages.appendChild(messageDiv);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        document.getElementById('userInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
