@@ -7,7 +7,7 @@ date: 2024-11-29
 
 ---
 
-<iframe allowfullscreen="true" width="640" height="360" scrolling="no" frameborder="0" style="border: none;" src="https://www.bitchute.com/embed/czJDCxuY6jgv"></iframe>
+
 
 **"You can write poems all you want. You can learn to code all you want. You can try to do anything you wish with your time. But it's meaningless. The world will look at you and only see a 'schizo,' a mentally ill, worthless piece of human trash. That’s all you can ever be in this world."**  
 – *Danny, 2009*
