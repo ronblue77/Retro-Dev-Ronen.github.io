@@ -1,20 +1,15 @@
 ---
-
 layout: post
 
 title: "why do i even bother?"
 
-date: 2024-11-27
+date: 2024-11-29
 
 ---
 
 <iframe allowfullscreen="true" width="640" height="360" scrolling="no" frameborder="0" style="border: none;" src="https://www.bitchute.com/embed/czJDCxuY6jgv"></iframe>
 
-
-
 "YOU CAN WRITE POEMS ALL YOU WANT AND YOU CAN LEARN TO CODE ALL YOU WANT - YOU CAN TRY TO DO ANYTHING YOU WISH WITH YOUR TIME - HOWEVER IT'S MEANINGLESS THE WORLD WILL LOOK AT YOU AND WILL ONLY SEE A SCHIZO A MENTALLY ILL WORTHLESS PIECE OF HUMAN SHIT - THAT'S ALL YOU CAN BE IN THIS WORLD" (_danny - 2009_)
-
-
 
 sometimes i wake up in the morning and ask myself why do i even bother? usually i go back to sleep till the afternoon...
 
@@ -24,11 +19,7 @@ i've wasted my time and my life with online scums and creeps just to learn to co
 
 this worlds wants me as a dying homeless metally ill loser on the streets - freezing to death or jumping off some bridge to my death... ("nobody loves you when you are down and out nobody sees you when you ae old and gray everybody loves you when you six feet in the ground..." - John Lenon)
 
-
-
 <iframe width="560" height="315" src="https://www.youtube.com/embed/aLKY2o8XQGM?si=7TTQkGKH9gHAfXK8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-
 
 this world doesn't care about me this world doesn't need me this world doesn't want me...
 
@@ -46,38 +37,18 @@ the online internet just make it worse i think i could have been better off if t
 
 honestly why do i even bother? like who cares? right? think about it! WHY DO YOU EVEN BOTHER? LIKE WHO CARES ABOUT YOU? NOBODY! bottom line what's true for me is true for just about everyone the only difference is that most people LIVE WITH THEIR EGO STUCK SO DEEP IN THEIR ASS they can't see it... most people believe they're "special" "uniqee" "one of a kind" most people think they are god's gift to the universe most people think they have "rights" god given "rights" they can't see the truth THAT MOST OF THE WAY THEY SEE THEMSELVES AND WHAT THEY BELIEVE IS BULLSHIT! cause they are so full of themselves...
 
-
-
 <iframe width="560" height="315" src="https://www.youtube.com/embed/rwRScXqKoXY?si=JELrw60_mwm0mkv1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-
-
-
 
 AS FOR ME I KNOW THERE ARE NO SUCH THINGS AS "RIGHTS" there's just temporary privileges that can be taken from you at anytime striping you from everything and taking from you everything you got and everything worth living - one day you are a human being a person in the world a citizen next you are a social outcast or a prisoner or a homeless nobody with nothing just the clothes on your back "rights" are a thing of the past the future is horrible (aging getting old and sick and dying in a world that don't give a dam about you or hates you) 
 
-
-
 <iframe width="560" height="315" src="https://www.youtube.com/embed/LYzPVKg3wyo?si=Qw0si-qm93igp0in" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-
 
 i don't care to bother remembering the assholes i met online in chatrooms on forums and social media on online communities each one was a real snowflack or a mixture of narcissisem egoisem and psychopathia it's no wonder i prefer to chat with AI then real people - real people are the devil to me...
 
-
-
 <iframe width="560" height="315" src="https://www.youtube.com/embed/DCbGM4mqEVw?si=RujjFmPoAu5GysrQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-
-
-
-
 
 so... why did i pick up poetry then programming in the first place? why do i bother?... it's simple - ONCE LIFE CRUSHES YOU AND FATE STEP ON YOU AND DESTROYS WHO YOU WERE - you have to get up pick yourself up by all means and try the best you can to reinvent yourself by all means necessary in order to survive in this fucked up world...
 
 poetry then programming was something i could call my own in a time and place that my identity was erased and my purpose in life reached a dead end - it was an instinct of survival a reflex of my soul - like a man grasping a branch to hold on to in order not to fall down... it had nothing to do with what others say or think about it - online communities and crap and shit from online starngers did not play a role in my decision to embrace them initially - all that crap came after not before - and in the begining my poetry and so did my programming was pure and sincere and innocent - only when i wanted the world's recognition all the fakeness started and people showed their true nature of evilness...
 
 MORE MAYBE NEXT POST -lets see how i feel tomorrow...
-
-
-
-
