@@ -79,35 +79,56 @@
     </div>
 
     <script>
-        const responses = {
-            // Help and navigation
-            "help": "Available sections:\n- DOS_GAMES (classic games)\n- WEB_GAMES (browser games)\n- DEMOS (demos)\n- VIDEOS (video content)\n- BLOG (articles)\n- CHAT (live chat)\n- FORUM (discussions)\nType 'info [section]' for details.",
-            "about": "Hi! I'm ron77, born 1977 in Israel. I'm a self-taught programmer since 2016, mainly using FreeBASIC. I create DOS-style games and love retro computing. Check ABOUT.ME for my full story!",
-            
-            // DOS Games
-            "dos games": "Current DOS games collection:\n- HIKIKOMORI\n- LOST_ART\n- GAZA\n- MENTAL\n- HOSTEL\n- AVIVBOT\n- LOSERVILLE\n- TITANIC\n- PEACEMAKER\n- PROTECTED_HOUSING\nType 'info [game]' for details.",
-            "web games": "Browser-based games:\n- SPACE_SHOOTER\n- HOMELESS\n- MANDELBROT_DEMO\n- NIGHT_STORY\nAll playable directly in your browser!",
-            
-            // Specific game info
-            "hikikomori": "Text-based game exploring themes of social isolation and mental health.",
-            "lost art": "a Futuristic Dark Dystopian Game where you try to Learn Programming to Save the World.",
-            "gaza": "Narrative-driven game exploring conflict and survival.",
-            "mental": "Psychological exploration game dealing with mental health themes.",
-            "space shooter": "Web-based retro-style space shooting game using Emscripten.",
-            
-            // Site sections
-            "demos": "Technical demos section featuring MATRIX.EXE - a visual demonstration.",
-            "blog": "although it's suppose to be a Dev Blog it's actually a Personal Blog of mine regarding my life and experience and my opinions and my struggles.",
-            "chat": "Real-time chat room for discussing retro gaming and programming.",
-            "forum": "Discussion forum for the retro dev community.",
-            "videos": "Video content available through Odysee platform.",
-            
-            // Programming
-            "programming": "I primarily use FreeBASIC, but also work with:\n- QB64\n- JavaScript\n- Python\n- C/C++\nMany games are compiled to web using Emscripten.",
-            
-            // Default response
-            "default": "Command not recognized. Type HELP for available commands. For specific game info, type 'info [game_name]'."
-        };
+const responses = {
+    // Core commands
+    "help": "Available sections:\n- DOS_GAMES (classic games)\n- WEB_GAMES (browser games)\n- DEMOS (demos)\n- VIDEOS (video content)\n- BLOG (articles)\n- CHAT (live chat)\n- FORUM (discussions)\nType 'info [section]' for details.",
+    "about": "Hi! I'm ron77, born 1977 in Israel. Self-taught programmer since 2016, mainly using FreeBASIC. I create DOS-style games and love retro computing.",
+    
+    // Games detailed info
+    "dos games": "Current DOS games:\n- HIKIKOMORI (social isolation)\n- LOST_ART (dystopian future)\n- GAZA (conflict survival)\n- MENTAL (psychological)\n- HOSTEL (adventure)\n- AVIVBOT (AI chat)\n- LOSERVILLE (life sim)\n- TITANIC (historical)\n- PEACEMAKER (politics)\n- PROTECTED_HOUSING (survival)\nType 'info [game]' for details.",
+    "web games": "Browser games:\n- SPACE_SHOOTER (arcade)\n- HOMELESS (survival)\n- MANDELBROT_DEMO (math art)\n- NIGHT_STORY (adventure)",
+    
+    // Game specifics
+    "hikikomori": "Text-based game exploring themes of social isolation and mental health. Play as a hikikomori trying to reconnect with the world.",
+    "lost art": "Dystopian future where coding is forbidden. Learn programming secretly to save humanity's lost knowledge.",
+    "gaza": "Survival text adventure set in conflict zone. Navigate challenges and moral choices.",
+    "mental": "Deep psychological narrative exploring mental health through interactive fiction.",
+    "hostel": "Text adventure in a mysterious hostel. Uncover dark secrets and survive the night.",
+    "avivbot": "Chat with an AI bot named Aviv. Early experiment in conversational AI.",
+    "loserville": "Life simulation in a town of outcasts. Find your place in Loserville.",
+    "titanic": "Historical fiction aboard the Titanic. Experience the last hours through text.",
+    "peacemaker": "Political simulation about conflict resolution.",
+    "protected housing": "Survival game in protected community housing.",
+    "space shooter": "Classic arcade-style space shooter built with modern web tech.",
+    "homeless": "Survival simulation about homelessness and society.",
+    "night story": "Interactive fiction about a mysterious night.",
+    "mandelbrot": "Interactive Mandelbrot set explorer with zoom.",
+
+    // Site sections
+    "demos": "Technical demos including MATRIX.EXE - text-based Matrix effect.",
+    "blog": "Personal blog about life experiences, mental health, and programming journey.",
+    "chat": "Real-time chat room for community discussion.",
+    "forum": "Discussion board for retro computing and game dev.",
+    "videos": "Video content on Odysee covering games and programming.",
+    
+    // Tech/Programming
+    "programming": "Main languages:\n- FreeBASIC (primary)\n- QB64\n- JavaScript\n- Python\n- C/C++\nFocus on DOS-style and text-based applications.",
+    "freebasic": "My main programming language. Great for DOS-style applications and games.",
+    "emscripten": "I use this to compile DOS games to web format.",
+    "dosbox": "DOS emulator used to run games in browser.",
+    
+    // General chat
+    "hi": "Hello! I'm the site assistant. Type HELP to see what I can do.",
+    "hello": "Hi there! Need help finding something? Type HELP for options.",
+    "how are you": "Running at optimal capacity! All systems green.",
+    "who are you": "I'm the site's assistant bot. Here to help navigate games and content.",
+    "what's new": "Check the blog for latest updates and new game releases!",
+    "thanks": "You're welcome! Type HELP if you need anything else.",
+    "bye": "Goodbye! Come back soon for more retro computing fun!",
+    
+    // Default
+    "default": "Command not recognized. Type HELP for available commands or try asking about specific games/sections."
+};
 
         function sendMessage() {
             const input = document.getElementById('userInput');
