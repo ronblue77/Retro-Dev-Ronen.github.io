@@ -53,6 +53,26 @@
         .bot-message {
             background: #f5f5f5;
             margin-right: 20%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .speak-button {
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            margin-left: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .speak-button:hover {
+            background: #218838;
         }
     </style>
 </head>
@@ -64,6 +84,20 @@
         <button onclick="sendMessage()">Send</button>
     </div>
     <script>
+        // Initialize speech synthesis
+        const synth = window.speechSynthesis;
+        
+        function speakText(text) {
+            // Stop any ongoing speech
+            synth.cancel();
+            
+            // Create a new utterance
+            const utterance = new SpeechSynthesisUtterance(text);
+            
+            // Speak the text
+            synth.speak(utterance);
+        }
+        
         var Module = {
             onRuntimeInitialized: function() {
                 // Load the database and swap words content
@@ -130,12 +164,28 @@
         }
 
         function appendMessage(message, isUser) {
-            var container = document.getElementById('chat-container');
-            var div = document.createElement('div');
-            div.className = 'message ' + (isUser ? 'user-message' : 'bot-message');
-            div.textContent = message;
-            container.appendChild(div);
-            container.scrollTop = container.scrollHeight;
+            const chatContainer = document.getElementById('chat-container');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            
+            if (isUser) {
+                messageDiv.textContent = message;
+            } else {
+                // For bot messages, add speak button
+                const textSpan = document.createElement('span');
+                textSpan.textContent = message;
+                
+                const speakButton = document.createElement('button');
+                speakButton.className = 'speak-button';
+                speakButton.innerHTML = '🔊';
+                speakButton.onclick = () => speakText(message);
+                
+                messageDiv.appendChild(textSpan);
+                messageDiv.appendChild(speakButton);
+            }
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
         // Handle Enter key
