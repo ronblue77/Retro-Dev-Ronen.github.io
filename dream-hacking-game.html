@@ -77,6 +77,14 @@
             display: inline-block;
             border-radius: 5px;
         }
+        .status {
+            margin-top: 10px;
+            padding: 5px;
+            background-color: #111;
+            border: 1px solid #0f0;
+            display: inline-block;
+            min-width: 300px;
+        }
     </style>
 </head>
 <body>
@@ -85,18 +93,45 @@
         <canvas id="dosbox" width="640" height="400"></canvas>
         <button class="fullscreen-button" id="fullscreen-toggle">Fullscreen</button>
     </div>
-    <script type="text/javascript" src="https://js-dos.com/6.22/current/js-dos.js"></script>
+    <div id="status" class="status">Loading...</div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/js-dos@6.22.60/dist/js-dos.js"></script>
     <script type="text/javascript">
+        // Status display function
+        function setStatus(message) {
+            document.getElementById('status').innerText = message;
+        }
+        
+        // DOSBox initialization
+        setStatus("Initializing DOSBox...");
+        
         Dos(document.getElementById("dosbox"), {
-            wdosboxUrl: "https://js-dos.com/6.22/current/wdosbox.js",
+            wdosboxUrl: "https://cdn.jsdelivr.net/npm/js-dos@6.22.60/dist/wdosbox.js",
             cycles: "auto",
             autolock: true,
         }).ready(function (fs, main) {
-            fs.extract("https://ronblue77.github.io/Retro-Dev-Ronen.github.io/games/DREAMHAK.ZIP").then(function () {
-                main(["-c", "CD DREAMHAK", "-c", "QBSTART.BAT"]).then(function (ci) {
+            setStatus("DOSBox ready. Loading game files...");
+            
+            // Replace this URL with the direct path to your ZIP file
+            const zipUrl = "DREAMHAK.ZIP"; // Local file in the same directory
+            
+            fs.extract(zipUrl)
+                .then(function () {
+                    setStatus("Game files extracted. Starting game...");
+                    
+                    return main(["-c", "CD DREAMHAK", "-c", "QBSTART.BAT"]);
+                })
+                .then(function (ci) {
                     window.ci = ci;
+                    setStatus("Game started!");
+                })
+                .catch(function (error) {
+                    setStatus("Error: " + error.message);
+                    console.error("Error loading game:", error);
                 });
-            });
+        }).catch(function(error) {
+            setStatus("Failed to initialize DOSBox: " + error.message);
+            console.error("DOSBox initialization error:", error);
         });
 
         // Fullscreen toggle functionality
