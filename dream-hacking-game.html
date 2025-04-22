@@ -282,17 +282,6 @@
             font-size: 0.9rem;
             opacity: 0.7;
         }
-
-        #debug-info {
-            margin-top: 10px;
-            font-size: 0.8rem;
-            color: #555;
-            text-align: left;
-            background-color: rgba(0, 0, 0, 0.2);
-            padding: 5px;
-            border-radius: 3px;
-            display: none;
-        }
     </style>
     <script src="https://js-dos.com/6.22/current/js-dos.js"></script>
 </head>
@@ -309,9 +298,7 @@
             <div class="controls">
                 <button onclick="startGame()" class="button-glitch" data-text="INITIALIZE">INITIALIZE</button>
                 <button onclick="toggleFullscreen()" class="button-glitch" data-text="EXPAND VIEW">EXPAND VIEW</button>
-                <button onclick="toggleDebug()" class="button-glitch" data-text="DEBUG">DEBUG</button>
             </div>
-            <div id="debug-info"></div>
         </div>
         
         <div class="info-panel">
@@ -333,31 +320,12 @@
 
     <script>
         let dosbox = null;
-        const debugInfo = document.getElementById('debug-info');
-
-        function logDebug(message) {
-            const timestamp = new Date().toLocaleTimeString();
-            debugInfo.innerHTML += `[${timestamp}] ${message}<br>`;
-            console.log(`[${timestamp}] ${message}`);
-        }
-
-        function toggleDebug() {
-            if (debugInfo.style.display === 'block') {
-                debugInfo.style.display = 'none';
-            } else {
-                debugInfo.style.display = 'block';
-                logDebug("Debug mode activated");
-            }
-        }
 
         async function startGame() {
             const status = document.getElementById('status');
             status.textContent = 'INITIALIZING NEURAL INTERFACE...';
             
             try {
-                logDebug("Starting DOSBox initialization");
-                
-                // Matching the exact ID from your working HACKER example
                 dosbox = Dos(document.getElementById('jsdos'), {
                     wdosboxUrl: "https://js-dos.com/6.22/current/wdosbox.js",
                     wasmUrl: "https://js-dos.com/6.22/current/wdosbox.wasm.js",
@@ -367,16 +335,12 @@
                     renderingMode: "canvas"
                 });
 
-                logDebug("DOSBox object created, waiting for ready state");
-
                 dosbox.ready((fs, main) => {
                     status.textContent = 'LOADING NEURAL PATTERNS...';
-                    logDebug("DOSBox ready, attempting to extract ZIP file");
                     
-                    // Using the exact path format from your working example
+                    // Using lowercase "zip" extension as you confirmed works
                     fs.extract('/Retro-Dev-Ronen.github.io/games/DREAMHAK.zip').then(() => {
                         status.textContent = 'EXECUTING DREAM PROTOCOL...';
-                        logDebug("File extracted successfully, launching game");
                         
                         main([
                             "-c", "cd DREAMHAK",
@@ -385,44 +349,16 @@
                         ])
                         .then(() => {
                             status.textContent = 'NEURAL INTERFACE ACTIVE // CONNECTION ESTABLISHED';
-                            logDebug("Game launched successfully");
                         })
                         .catch((error) => {
-                            logDebug(`Protocol execution error: ${error}`);
-                            status.textContent = 'NEURAL CONNECTION FAILURE: ' + error;
-                            status.style.color = '#ff5555';
+                            status.textContent = 'NEURAL CONNECTION FAILURE';
                         });
                     }).catch((error) => {
-                        logDebug(`Neural pattern load error: ${error}`);
-                        status.textContent = 'PATTERN ACQUISITION FAILURE: ' + error;
-                        status.style.color = '#ff5555';
-                        
-                        // Try alternative path as fallback
-                        logDebug("Attempting alternative file path...");
-                        fs.extract('games/DREAMHAK.zip').then(() => {
-                            logDebug("Alternative path succeeded, launching game");
-                            main([
-                                "-c", "cd DREAMHAK",
-                                "-c", "cycles = 12000",
-                                "-c", "QBSTART.BAT"
-                            ])
-                            .then(() => {
-                                status.textContent = 'NEURAL INTERFACE ACTIVE // CONNECTION ESTABLISHED';
-                                status.style.color = '';
-                                logDebug("Game launched successfully with alternative path");
-                            })
-                            .catch((err) => {
-                                logDebug(`Alternative path launch error: ${err}`);
-                            });
-                        }).catch((err) => {
-                            logDebug(`Alternative path failed: ${err}`);
-                        });
+                        status.textContent = 'PATTERN ACQUISITION FAILURE';
                     });
                 });
             } catch (error) {
-                logDebug(`Interface initialization error: ${error.message}`);
-                status.textContent = 'CRITICAL NEURAL SYSTEM FAILURE: ' + error.message;
-                status.style.color = '#ff5555';
+                status.textContent = 'CRITICAL NEURAL SYSTEM FAILURE';
             }
         }
 
