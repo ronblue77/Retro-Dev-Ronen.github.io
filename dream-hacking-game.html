@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream Hacking - Retro DOS Game</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        #dosbox {
+            margin: 0 auto;
+            max-width: 640px;
+        }
+        .fullscreen-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .fullscreen-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #0f0;
+            border: 1px solid #0f0;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            z-index: 10;
+            font-family: 'Courier New', monospace;
+        }
+        .fullscreen-button:hover {
+            background-color: rgba(0, 80, 0, 0.5);
+        }
+        /* Fullscreen styles */
+        .fullscreen-active #dosbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            z-index: 9999;
+            margin: 0;
+            border: none;
+        }
+        .fullscreen-active .fullscreen-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+        }
+        .fullscreen-active h1, 
+        .fullscreen-active .back-button {
+            display: none;
+        }
+        h1 {
+            color: #0f0;
+            text-shadow: 0 0 5px #0f0;
+        }
+        a {
+            color: #0ff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .back-button {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #222;
+            display: inline-block;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dream Hacking</h1>
+    <div class="fullscreen-wrapper">
+        <canvas id="dosbox" width="640" height="400"></canvas>
+        <button class="fullscreen-button" id="fullscreen-toggle">Fullscreen</button>
+    </div>
+    <script type="text/javascript" src="https://js-dos.com/6.22/current/js-dos.js"></script>
+    <script type="text/javascript">
+        Dos(document.getElementById("dosbox"), {
+            wdosboxUrl: "https://js-dos.com/6.22/current/wdosbox.js",
+            cycles: "auto",
+            autolock: true,
+        }).ready(function (fs, main) {
+            fs.extract("https://ronblue77.github.io/Retro-Dev-Ronen.github.io/games/DREAMHAK.ZIP").then(function () {
+                main(["-c", "CD DREAMHAK", "-c", "QBSTART.BAT"]).then(function (ci) {
+                    window.ci = ci;
+                });
+            });
+        });
+
+        // Fullscreen toggle functionality
+        document.getElementById('fullscreen-toggle').addEventListener('click', function() {
+            document.body.classList.toggle('fullscreen-active');
+            
+            const canvas = document.getElementById('dosbox');
+            if (document.body.classList.contains('fullscreen-active')) {
+                this.textContent = "Exit Fullscreen";
+                
+                // Handle fullscreen API
+                if (canvas.requestFullscreen) {
+                    canvas.requestFullscreen();
+                } else if (canvas.mozRequestFullScreen) {
+                    canvas.mozRequestFullScreen();
+                } else if (canvas.webkitRequestFullscreen) {
+                    canvas.webkitRequestFullscreen();
+                } else if (canvas.msRequestFullscreen) {
+                    canvas.msRequestFullscreen();
+                }
+            } else {
+                this.textContent = "Fullscreen";
+                
+                // Exit fullscreen
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        });
+
+        // Listen for fullscreen change events
+        document.addEventListener('fullscreenchange', updateFullscreenState);
+        document.addEventListener('webkitfullscreenchange', updateFullscreenState);
+        document.addEventListener('mozfullscreenchange', updateFullscreenState);
+        document.addEventListener('MSFullscreenChange', updateFullscreenState);
+
+        function updateFullscreenState() {
+            const isFullscreen = document.fullscreenElement || 
+                                document.webkitFullscreenElement || 
+                                document.mozFullScreenElement || 
+                                document.msFullscreenElement;
+            
+            const button = document.getElementById('fullscreen-toggle');
+            if (!isFullscreen && document.body.classList.contains('fullscreen-active')) {
+                document.body.classList.remove('fullscreen-active');
+                button.textContent = "Fullscreen";
+            }
+        }
+    </script>
+    
+    <div class="back-button">
+        <a href="dream-hacking-game-desc.html">Game Description</a> | 
+        <a href="index.html">Back to Main Page</a>
+    </div>
+</body>
+</html>
