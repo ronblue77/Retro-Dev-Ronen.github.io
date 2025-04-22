@@ -374,7 +374,7 @@
                     logDebug("DOSBox ready, attempting to extract ZIP file");
                     
                     // Using the exact path format from your working example
-                    fs.extract('/Retro-Dev-Ronen.github.io/games/DREAMHAK.ZIP').then(() => {
+                    fs.extract('/Retro-Dev-Ronen.github.io/games/DREAMHAK.zip').then(() => {
                         status.textContent = 'EXECUTING DREAM PROTOCOL...';
                         logDebug("File extracted successfully, launching game");
                         
@@ -399,7 +399,7 @@
                         
                         // Try alternative path as fallback
                         logDebug("Attempting alternative file path...");
-                        fs.extract('games/DREAMHAK.ZIP').then(() => {
+                        fs.extract('games/DREAMHAK.zip').then(() => {
                             logDebug("Alternative path succeeded, launching game");
                             main([
                                 "-c", "cd DREAMHAK",
