@@ -3,298 +3,388 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dream Hacking - Retro DOS Game</title>
+    <title>Dream Hacking - Neural Interface</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+        
+        :root {
+            --primary-color: #00c3ff;
+            --secondary-color: #d400ff;
+            --bg-color: #0a0a1a;
+            --dark-bg: #050510;
+            --text-color: #e0e0ff;
+            --glow-strength: 5px;
+        }
+        
         body {
-            background-color: #000;
-            color: #0f0;
-            font-family: 'Courier New', monospace;
-            text-align: center;
+            background-color: var(--bg-color);
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(0, 195, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(212, 0, 255, 0.1) 0%, transparent 50%);
+            color: var(--text-color);
+            font-family: 'Share Tech Mono', monospace;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        #dosbox {
-            margin: 0 auto;
-            max-width: 640px;
-            border: 1px solid #0f0;
-        }
-        .fullscreen-wrapper {
+        
+        header {
+            width: 100%;
+            background-color: var(--dark-bg);
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 0 25px rgba(0, 195, 255, 0.2);
             position: relative;
-            display: inline-block;
+            overflow: hidden;
         }
-        .fullscreen-button {
+        
+        header::before {
+            content: '';
             position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: #0f0;
-            border: 1px solid #0f0;
-            border-radius: 4px;
-            padding: 5px 10px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--primary-color));
+            animation: scanline 2s linear infinite;
+        }
+        
+        @keyframes scanline {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+            text-shadow: 0 0 var(--glow-strength) rgba(0, 195, 255, 0.5);
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        
+        main {
+            max-width: 800px;
+            width: 100%;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        
+        .game-container {
+            background-color: var(--dark-bg);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid rgba(0, 195, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 195, 255, 0.2);
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .game-container::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 15px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        #dosbox {
+            width: 100%;
+            height: 400px;
+            border-radius: 5px;
+            margin: 10px auto;
+            display: block;
+            background-color: #000;
+        }
+        
+        #status {
+            text-align: center;
+            padding: 10px;
+            margin: 15px 0;
+            border-radius: 5px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-left: 3px solid var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        button {
+            background-color: rgba(10, 10, 30, 0.7);
+            color: var(--text-color);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
             cursor: pointer;
-            z-index: 10;
-            font-family: 'Courier New', monospace;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            z-index: 1;
         }
-        .fullscreen-button:hover {
-            background-color: rgba(0, 80, 0, 0.5);
-        }
-        /* Fullscreen styles */
-        .fullscreen-active #dosbox {
-            position: fixed;
+        
+        button::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            max-width: 100%;
-            z-index: 9999;
-            margin: 0;
-            border: none;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            opacity: 0;
+            z-index: -1;
+            transition: opacity 0.3s ease;
         }
-        .fullscreen-active .fullscreen-button {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 10000;
+        
+        button:hover::before {
+            opacity: 0.8;
         }
-        .fullscreen-active h1, 
-        .fullscreen-active .back-button,
-        .fullscreen-active .status {
-            display: none;
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(0, 0, 0, 0.3);
         }
-        h1 {
-            color: #0f0;
-            text-shadow: 0 0 5px #0f0;
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .info-panel {
+            background-color: var(--dark-bg);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid rgba(212, 0, 255, a0.3);
             margin-bottom: 20px;
         }
-        a {
-            color: #0ff;
-            text-decoration: none;
+        
+        .info-panel h3 {
+            margin-top: 0;
+            color: var(--secondary-color);
+            border-bottom: 1px solid rgba(212, 0, 255, 0.3);
+            padding-bottom: 10px;
         }
-        a:hover {
-            text-decoration: underline;
+        
+        .commands {
+            list-style-type: none;
+            padding: 0;
         }
-        .back-button {
-            margin-top: 20px;
+        
+        .commands li {
             padding: 10px;
-            background-color: #222;
+            border-left: 2px solid var(--secondary-color);
+            margin-bottom: 10px;
+            background-color: rgba(10, 10, 30, 0.3);
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .commands li span {
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .back-link {
             display: inline-block;
+            color: var(--text-color);
+            text-decoration: none;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: rgba(10, 10, 30, 0.5);
             border-radius: 5px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 195, 255, 0.2);
         }
-        .status {
-            margin: 15px auto;
-            padding: 8px;
-            background-color: #111;
-            border: 1px solid #0f0;
+        
+        .back-link:hover {
+            background-color: rgba(0, 195, 255, 0.2);
+        }
+        
+        .glitch-effect {
+            position: relative;
             display: inline-block;
-            min-width: 300px;
-            border-radius: 4px;
         }
-        #loading-progress {
+        
+        .glitch-effect::before,
+        .glitch-effect::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 10px;
-            margin-top: 5px;
-            background-color: #222;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        #progress-bar {
             height: 100%;
-            width: 0%;
-            background-color: #0f0;
-            transition: width 0.3s;
+            background: var(--bg-color);
         }
-        .error {
-            color: #f55;
-            border-color: #f55;
+        
+        .glitch-effect::before {
+            color: var(--primary-color);
+            z-index: -1;
+        }
+        
+        .glitch-effect::after {
+            color: var(--secondary-color);
+            z-index: -2;
+        }
+        
+        @keyframes glitch-anim-1 {
+            0% { clip-path: inset(20% 0 80% 0); transform: translate(-1px, -1px); }
+            20% { clip-path: inset(60% 0 40% 0); transform: translate(1px, 1px); }
+            40% { clip-path: inset(40% 0 60% 0); transform: translate(-1px, 1px); }
+            60% { clip-path: inset(80% 0 20% 0); transform: translate(1px, -1px); }
+            80% { clip-path: inset(50% 0 50% 0); transform: translate(1px, -1px); }
+            100% { clip-path: inset(20% 0 80% 0); transform: translate(-1px, 1px); }
+        }
+        
+        @keyframes glitch-anim-2 {
+            0% { clip-path: inset(30% 0 70% 0); transform: translate(1px, -1px); }
+            20% { clip-path: inset(10% 0 90% 0); transform: translate(-1px, 1px); }
+            40% { clip-path: inset(70% 0 30% 0); transform: translate(1px, 1px); }
+            60% { clip-path: inset(20% 0 80% 0); transform: translate(-1px, -1px); }
+            80% { clip-path: inset(40% 0 60% 0); transform: translate(1px, -1px); }
+            100% { clip-path: inset(30% 0 70% 0); transform: translate(-1px, 1px); }
+        }
+        
+        .button-glitch:hover::before {
+            animation: glitch-anim-1 0.3s infinite linear alternate-reverse;
+        }
+        
+        .button-glitch:hover::after {
+            animation: glitch-anim-2 0.3s infinite linear alternate-reverse;
+        }
+        
+        footer {
+            margin-top: auto;
+            width: 100%;
+            background-color: var(--dark-bg);
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            opacity: 0.7;
         }
     </style>
+    <script src="https://js-dos.com/6.22/current/js-dos.js"></script>
 </head>
 <body>
-    <h1>Dream Hacking</h1>
+    <header>
+        <h1>DREAM HACKING</h1>
+        <div class="subtitle">Neural Interface v2.0</div>
+    </header>
     
-    <div class="status" id="status">
-        Initializing DOSBox...
-        <div id="loading-progress">
-            <div id="progress-bar"></div>
+    <main>
+        <div class="game-container">
+            <div id="status">SYSTEM STANDBY // AWAITING INITIALIZATION</div>
+            <canvas id="dosbox"></canvas>
+            <div class="controls">
+                <button onclick="startGame()" class="button-glitch" data-text="INITIALIZE">INITIALIZE</button>
+                <button onclick="toggleFullscreen()" class="button-glitch" data-text="EXPAND VIEW">EXPAND VIEW</button>
+            </div>
         </div>
-    </div>
+        
+        <div class="info-panel">
+            <h3>NEURAL INTERFACE COMMANDS</h3>
+            <ul class="commands">
+                <li><span>ESC</span> Emergency system pause</li>
+                <li><span>ALT+ENTER</span> Neural display expansion</li>
+                <li><span>ARROWS</span> Neural pathway navigation</li>
+                <li><span>ENTER</span> Execute neural command</li>
+            </ul>
+        </div>
+        
+        <a href="index.html" class="back-link">« RETURN TO MAIN SYSTEM</a>
+    </main>
     
-    <div class="fullscreen-wrapper">
-        <canvas id="dosbox" width="640" height="400"></canvas>
-        <button class="fullscreen-button" id="fullscreen-toggle">Fullscreen</button>
-    </div>
-    
-    <div class="back-button">
-        <a href="dream-hacking-game-desc.html">Game Description</a> | 
-        <a href="index.html">Back to Main Page</a>
-    </div>
+    <footer>
+        DREAM HACKING NEURAL INTERFACE &copy; 2025 // UNAUTHORIZED ACCESS PROHIBITED
+    </footer>
 
-    <!-- Using a more reliable CDN version -->
-    <script src="https://cdn.jsdelivr.net/npm/js-dos@6.22.60/dist/js-dos.js"></script>
-    <script type="text/javascript">
-        // Status display functions
-        const statusElement = document.getElementById('status');
-        const progressBar = document.getElementById('progress-bar');
-        
-        function setStatus(message, error = false) {
-            statusElement.innerText = message;
-            if (error) {
-                statusElement.classList.add('error');
-            } else {
-                statusElement.classList.remove('error');
-            }
-        }
-        
-        function updateProgress(percent) {
-            progressBar.style.width = percent + '%';
-        }
-        
-        // First check if js-dos loaded correctly
-        if (typeof Dos === 'undefined') {
-            setStatus('Error: js-dos library failed to load. Check your internet connection or try a different browser.', true);
-        } else {
-            // DOSBox initialization
-            try {
-                const dosboxElement = document.getElementById('dosbox');
-                
-                // The correct path to your ZIP file on GitHub Pages
-                const zipUrl = "https://ronblue77.github.io/Retro-Dev-Ronen.github.io/games/DREAMHAK.ZIP";
-                
-                // Configuration options
-                const dosboxOptions = {
-                    wdosboxUrl: "https://cdn.jsdelivr.net/npm/js-dos@6.22.60/dist/wdosbox.js",
-                    cycles: "max",
-                    autolock: false
-                };
-                
-                // Initialize js-dos
-                setStatus("Starting DOSBox...");
-                
-                Dos(dosboxElement, dosboxOptions)
-                    .then(function (dos) {
-                        setStatus("DOSBox started. Loading game files...");
-                        
-                        // Show download progress
-                        dos.addEventListener("onprogress", function(e) {
-                            if (e.total > 0) {
-                                const percent = Math.floor((e.loaded / e.total) * 100);
-                                updateProgress(percent);
-                                setStatus(`Loading game files: ${percent}%`);
-                            }
-                        });
-                        
-                        // Extract the game
-                        return dos.extract(zipUrl);
-                    })
-                    .then(function (fs) {
-                        setStatus("Game files extracted. Exploring structure...");
-                        updateProgress(100);
-                        
-                        // Debug: List files in the root
-                        console.log("Files in root directory:");
-                        fs.dir(".").forEach(file => {
-                            console.log("- " + file);
-                        });
-                        
-                        // Try to check if DREAMHAK directory exists
-                        try {
-                            console.log("Files in DREAMHAK directory (if it exists):");
-                            fs.dir("DREAMHAK").forEach(file => {
-                                console.log("- DREAMHAK/" + file);
-                            });
-                        } catch (e) {
-                            console.log("No DREAMHAK directory found, will try root path.");
-                        }
-                        
-                        setStatus("Starting game...");
-                        
-                        // Try multiple possible launch methods
-                        try {
-                            // Method 1: If QBSTART.BAT is in root
-                            return fs.launch("QBSTART.BAT");
-                        } catch (e1) {
-                            console.log("Could not find QBSTART.BAT in root, trying DREAMHAK directory");
-                            try {
-                                // Method 2: If we need to CD into DREAMHAK first
-                                return fs.launch("DREAMHAK/QBSTART.BAT");
-                            } catch (e2) {
-                                // Method 3: If everything else fails, use command line with explicit CD
-                                console.log("Trying with command line approach");
-                                return fs.main(["-c", "CD DREAMHAK", "-c", "QBSTART.BAT"]);
-                            }
-                        }
-                    })
-                    .then(function (ci) {
-                        window.ci = ci;
-                        setStatus("Game running!");
-                        
-                        // Hide status after 3 seconds
-                        setTimeout(function() {
-                            statusElement.style.display = 'none';
-                        }, 3000);
-                    })
-                    .catch(function (error) {
-                        console.error("Error:", error);
-                        setStatus("Error: " + (error.message || "Unknown error"), true);
-                    });
-            } catch (e) {
-                console.error("Initialization error:", e);
-                setStatus("Failed to initialize: " + e.message, true);
-            }
-        }
+    <script>
+        let dosbox = null;
 
-        // Fullscreen toggle functionality
-        document.getElementById('fullscreen-toggle').addEventListener('click', function() {
-            document.body.classList.toggle('fullscreen-active');
+        async function startGame() {
+            const status = document.getElementById('status');
+            status.textContent = 'INITIALIZING NEURAL INTERFACE...';
             
+            try {
+                dosbox = Dos(document.getElementById('dosbox'), {
+                    wdosboxUrl: "https://js-dos.com/6.22/current/wdosbox.js",
+                    wasmUrl: "https://js-dos.com/6.22/current/wdosbox.wasm.js",
+                    cycles: "12000",
+                    autolock: false,
+                    scaleFactor: 1,
+                    renderingMode: "canvas"
+                });
+
+                dosbox.ready((fs, main) => {
+                    status.textContent = 'LOADING NEURAL PATTERNS...';
+                    
+                    fs.extract('/Retro-Dev-Ronen.github.io/games/DREAMHAK.ZIP').then(() => {
+                        status.textContent = 'EXECUTING DREAM PROTOCOL...';
+                        
+                        main([
+                            "-c", "cd DREAMHAK",
+                            "-c", "cycles = 12000",
+                            "-c", "QBSTART.BAT"
+                        ])
+                        .then(() => {
+                            status.textContent = 'NEURAL INTERFACE ACTIVE // CONNECTION ESTABLISHED';
+                        })
+                        .catch((error) => {
+                            console.error("Protocol execution error:", error);
+                            status.textContent = 'NEURAL CONNECTION FAILURE: ' + error;
+                        });
+                    }).catch((error) => {
+                        console.error("Neural pattern load error:", error);
+                        status.textContent = 'PATTERN ACQUISITION FAILURE: ' + error;
+                    });
+                });
+            } catch (error) {
+                console.error("Interface initialization error:", error);
+                status.textContent = 'CRITICAL NEURAL SYSTEM FAILURE: ' + error.message;
+            }
+        }
+
+        function toggleFullscreen() {
             const canvas = document.getElementById('dosbox');
-            if (document.body.classList.contains('fullscreen-active')) {
-                this.textContent = "Exit Fullscreen";
-                
-                // Handle fullscreen API
-                if (canvas.requestFullscreen) {
-                    canvas.requestFullscreen();
-                } else if (canvas.mozRequestFullScreen) {
-                    canvas.mozRequestFullScreen();
-                } else if (canvas.webkitRequestFullscreen) {
-                    canvas.webkitRequestFullscreen();
-                } else if (canvas.msRequestFullscreen) {
-                    canvas.msRequestFullscreen();
-                }
+            if (!document.fullscreenElement) {
+                canvas.requestFullscreen().catch(err => {
+                    console.error('Neural expansion error:', err);
+                });
             } else {
-                this.textContent = "Fullscreen";
-                
-                // Exit fullscreen
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                } else if (document.mozCancelFullScreen) {
-                    document.mozCancelFullScreen();
-                } else if (document.webkitExitFullscreen) {
-                    document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) {
-                    document.msExitFullscreen();
-                }
+                document.exitFullscreen();
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.altKey) {
+                toggleFullscreen();
             }
         });
-
-        // Listen for fullscreen change events
-        document.addEventListener('fullscreenchange', updateFullscreenState);
-        document.addEventListener('webkitfullscreenchange', updateFullscreenState);
-        document.addEventListener('mozfullscreenchange', updateFullscreenState);
-        document.addEventListener('MSFullscreenChange', updateFullscreenState);
-
-        function updateFullscreenState() {
-            const isFullscreen = document.fullscreenElement || 
-                                document.webkitFullscreenElement || 
-                                document.mozFullScreenElement || 
-                                document.msFullscreenElement;
-            
-            const button = document.getElementById('fullscreen-toggle');
-            if (!isFullscreen && document.body.classList.contains('fullscreen-active')) {
-                document.body.classList.remove('fullscreen-active');
-                button.textContent = "Fullscreen";
-            }
-        }
+        
+        // Add glitch effect animation for buttons on hover
+        document.querySelectorAll('.button-glitch').forEach(button => {
+            button.setAttribute('data-text', button.textContent);
+        });
     </script>
 </body>
 </html>
