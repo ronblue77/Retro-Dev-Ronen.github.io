@@ -16,6 +16,7 @@
         #dosbox {
             margin: 0 auto;
             max-width: 640px;
+            border: 1px solid #0f0;
         }
         .fullscreen-wrapper {
             position: relative;
@@ -56,12 +57,14 @@
             z-index: 10000;
         }
         .fullscreen-active h1, 
-        .fullscreen-active .back-button {
+        .fullscreen-active .back-button,
+        .fullscreen-active .status {
             display: none;
         }
         h1 {
             color: #0f0;
             text-shadow: 0 0 5px #0f0;
+            margin-bottom: 20px;
         }
         a {
             color: #0ff;
@@ -78,61 +81,167 @@
             border-radius: 5px;
         }
         .status {
-            margin-top: 10px;
-            padding: 5px;
+            margin: 15px auto;
+            padding: 8px;
             background-color: #111;
             border: 1px solid #0f0;
             display: inline-block;
             min-width: 300px;
+            border-radius: 4px;
+        }
+        #loading-progress {
+            width: 100%;
+            height: 10px;
+            margin-top: 5px;
+            background-color: #222;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: #0f0;
+            transition: width 0.3s;
+        }
+        .error {
+            color: #f55;
+            border-color: #f55;
         }
     </style>
 </head>
 <body>
     <h1>Dream Hacking</h1>
+    
+    <div class="status" id="status">
+        Initializing DOSBox...
+        <div id="loading-progress">
+            <div id="progress-bar"></div>
+        </div>
+    </div>
+    
     <div class="fullscreen-wrapper">
         <canvas id="dosbox" width="640" height="400"></canvas>
         <button class="fullscreen-button" id="fullscreen-toggle">Fullscreen</button>
     </div>
-    <div id="status" class="status">Loading...</div>
     
+    <div class="back-button">
+        <a href="dream-hacking-game-desc.html">Game Description</a> | 
+        <a href="index.html">Back to Main Page</a>
+    </div>
+
+    <!-- Using a more reliable CDN version -->
     <script src="https://cdn.jsdelivr.net/npm/js-dos@6.22.60/dist/js-dos.js"></script>
     <script type="text/javascript">
-        // Status display function
-        function setStatus(message) {
-            document.getElementById('status').innerText = message;
+        // Status display functions
+        const statusElement = document.getElementById('status');
+        const progressBar = document.getElementById('progress-bar');
+        
+        function setStatus(message, error = false) {
+            statusElement.innerText = message;
+            if (error) {
+                statusElement.classList.add('error');
+            } else {
+                statusElement.classList.remove('error');
+            }
         }
         
-        // DOSBox initialization
-        setStatus("Initializing DOSBox...");
+        function updateProgress(percent) {
+            progressBar.style.width = percent + '%';
+        }
         
-        Dos(document.getElementById("dosbox"), {
-            wdosboxUrl: "https://cdn.jsdelivr.net/npm/js-dos@6.22.60/dist/wdosbox.js",
-            cycles: "auto",
-            autolock: true,
-        }).ready(function (fs, main) {
-            setStatus("DOSBox ready. Loading game files...");
-            
-            // Replace this URL with the direct path to your ZIP file
-            const zipUrl = "DREAMHAK.ZIP"; // Local file in the same directory
-            
-            fs.extract(zipUrl)
-                .then(function () {
-                    setStatus("Game files extracted. Starting game...");
-                    
-                    return main(["-c", "CD DREAMHAK", "-c", "QBSTART.BAT"]);
-                })
-                .then(function (ci) {
-                    window.ci = ci;
-                    setStatus("Game started!");
-                })
-                .catch(function (error) {
-                    setStatus("Error: " + error.message);
-                    console.error("Error loading game:", error);
-                });
-        }).catch(function(error) {
-            setStatus("Failed to initialize DOSBox: " + error.message);
-            console.error("DOSBox initialization error:", error);
-        });
+        // First check if js-dos loaded correctly
+        if (typeof Dos === 'undefined') {
+            setStatus('Error: js-dos library failed to load. Check your internet connection or try a different browser.', true);
+        } else {
+            // DOSBox initialization
+            try {
+                const dosboxElement = document.getElementById('dosbox');
+                
+                // The correct path to your ZIP file on GitHub Pages
+                const zipUrl = "https://ronblue77.github.io/Retro-Dev-Ronen.github.io/games/DREAMHAK.ZIP";
+                
+                // Configuration options
+                const dosboxOptions = {
+                    wdosboxUrl: "https://cdn.jsdelivr.net/npm/js-dos@6.22.60/dist/wdosbox.js",
+                    cycles: "max",
+                    autolock: false
+                };
+                
+                // Initialize js-dos
+                setStatus("Starting DOSBox...");
+                
+                Dos(dosboxElement, dosboxOptions)
+                    .then(function (dos) {
+                        setStatus("DOSBox started. Loading game files...");
+                        
+                        // Show download progress
+                        dos.addEventListener("onprogress", function(e) {
+                            if (e.total > 0) {
+                                const percent = Math.floor((e.loaded / e.total) * 100);
+                                updateProgress(percent);
+                                setStatus(`Loading game files: ${percent}%`);
+                            }
+                        });
+                        
+                        // Extract the game
+                        return dos.extract(zipUrl);
+                    })
+                    .then(function (fs) {
+                        setStatus("Game files extracted. Exploring structure...");
+                        updateProgress(100);
+                        
+                        // Debug: List files in the root
+                        console.log("Files in root directory:");
+                        fs.dir(".").forEach(file => {
+                            console.log("- " + file);
+                        });
+                        
+                        // Try to check if DREAMHAK directory exists
+                        try {
+                            console.log("Files in DREAMHAK directory (if it exists):");
+                            fs.dir("DREAMHAK").forEach(file => {
+                                console.log("- DREAMHAK/" + file);
+                            });
+                        } catch (e) {
+                            console.log("No DREAMHAK directory found, will try root path.");
+                        }
+                        
+                        setStatus("Starting game...");
+                        
+                        // Try multiple possible launch methods
+                        try {
+                            // Method 1: If QBSTART.BAT is in root
+                            return fs.launch("QBSTART.BAT");
+                        } catch (e1) {
+                            console.log("Could not find QBSTART.BAT in root, trying DREAMHAK directory");
+                            try {
+                                // Method 2: If we need to CD into DREAMHAK first
+                                return fs.launch("DREAMHAK/QBSTART.BAT");
+                            } catch (e2) {
+                                // Method 3: If everything else fails, use command line with explicit CD
+                                console.log("Trying with command line approach");
+                                return fs.main(["-c", "CD DREAMHAK", "-c", "QBSTART.BAT"]);
+                            }
+                        }
+                    })
+                    .then(function (ci) {
+                        window.ci = ci;
+                        setStatus("Game running!");
+                        
+                        // Hide status after 3 seconds
+                        setTimeout(function() {
+                            statusElement.style.display = 'none';
+                        }, 3000);
+                    })
+                    .catch(function (error) {
+                        console.error("Error:", error);
+                        setStatus("Error: " + (error.message || "Unknown error"), true);
+                    });
+            } catch (e) {
+                console.error("Initialization error:", e);
+                setStatus("Failed to initialize: " + e.message, true);
+            }
+        }
 
         // Fullscreen toggle functionality
         document.getElementById('fullscreen-toggle').addEventListener('click', function() {
@@ -187,10 +296,5 @@
             }
         }
     </script>
-    
-    <div class="back-button">
-        <a href="dream-hacking-game-desc.html">Game Description</a> | 
-        <a href="index.html">Back to Main Page</a>
-    </div>
 </body>
 </html>
